@@ -14,24 +14,24 @@ export enum UserRole {
 @Entity()
 export class User {
   @PrimaryGeneratedColumn('uuid')
-  id: string | undefined;
+  id!: string;
 
   @Column()
-  name: string | undefined;
+  name!: string;
 
   @Column({ unique: true })
-  email: string | undefined;
+  email!: string;
 
   @Column()
-  password: string | undefined;
+  password!: string;
 
   @Column({
     type: 'enum',
     enum: UserRole,
     default: UserRole.CLIENT,
   })
-  role: UserRole | undefined;
+  role!: UserRole;
 
   @CreateDateColumn()
-  createdAt: Date | undefined;
+  createdAt!: Date;
 }
