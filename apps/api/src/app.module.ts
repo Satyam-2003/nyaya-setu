@@ -7,6 +7,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { User } from './database/postgres/entities/user.entity';
 import { AuthModule } from './modules/auth/auth.module';
 import { UsersModule } from './modules/users/users.module';
+import { LawyersModule } from './modules/laywers/lawyers.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { UsersModule } from './modules/users/users.module';
     }),
     AuthModule,
     UsersModule,
+    LawyersModule
   ],
   controllers: [AppController],
   providers: [AppService],
