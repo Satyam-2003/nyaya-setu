@@ -9,6 +9,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { UsersModule } from './modules/users/users.module';
 import { LawyersModule } from './modules/laywers/lawyers.module';
 import { CasesModule } from './modules/cases/cases.module';
+import { RatingsModule } from './modules/ratings/ratings.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { CasesModule } from './modules/cases/cases.module';
     UsersModule,
     LawyersModule,
     CasesModule,
+    RatingsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
