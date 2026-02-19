@@ -8,6 +8,7 @@ import { User } from './database/postgres/entities/user.entity';
 import { AuthModule } from './modules/auth/auth.module';
 import { UsersModule } from './modules/users/users.module';
 import { LawyersModule } from './modules/laywers/lawyers.module';
+import { CasesModule } from './modules/cases/cases.module';
 
 @Module({
   imports: [
@@ -31,7 +32,8 @@ import { LawyersModule } from './modules/laywers/lawyers.module';
     }),
     AuthModule,
     UsersModule,
-    LawyersModule
+    LawyersModule,
+    CasesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
