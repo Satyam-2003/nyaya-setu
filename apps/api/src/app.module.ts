@@ -11,6 +11,8 @@ import { LawyersModule } from './modules/laywers/lawyers.module';
 import { CasesModule } from './modules/cases/cases.module';
 import { RatingsModule } from './modules/ratings/ratings.module';
 import { ChatModule } from './modules/chat/chat.module';
+import { PaymentsModule } from './modules/payments/payments.module';
+import { MatchingModule } from './modules/matching/matching.module';
 
 @Module({
   imports: [
@@ -38,6 +40,8 @@ import { ChatModule } from './modules/chat/chat.module';
     CasesModule,
     RatingsModule,
     ChatModule,
+    PaymentsModule,
+    MatchingModule,
   ],
   controllers: [AppController],
   providers: [AppService],
