@@ -9,6 +9,8 @@ import { Server, Socket } from 'socket.io';
 import { JwtService } from '@nestjs/jwt';
 import { ChatService } from './chat.service';
 import { SendMessageDto } from './dto/send-message.dto';
+import { NotificationsService } from '../notifications/notifications.service';
+import { NotificationType } from '../../database/postgres/entities/notification.entity';
 
 @WebSocketGateway({
   cors: {
@@ -22,6 +24,7 @@ export class ChatGateway {
   constructor(
     private jwtService: JwtService,
     private chatService: ChatService,
+    private notificationsService: NotificationsService,
   ) {}
 
   async handleConnection(client: Socket) {
@@ -68,6 +71,15 @@ export class ChatGateway {
 
     this.server.to(dto.caseId).emit('newMessage', savedMessage);
 
-    return savedMessage;
+    if (userId) {
+      await this.notificationsService.create({
+        recipientId: userId,
+        title: 'New Chat Message',
+        message: 'You have received a new message.',
+        type: NotificationType.NEW_MESSAGE,
+      });
+
+      return savedMessage;
+    }
   }
 }

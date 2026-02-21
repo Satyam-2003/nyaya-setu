@@ -7,6 +7,8 @@ import {
 } from 'src/database/postgres/entities/payment.entity';
 import { Case, CaseStatus } from 'src/database/postgres/entities/case.entity';
 import { StripeService } from './stripe.service';
+import { NotificationsService } from '../notifications/notifications.service';
+import { NotificationType } from '../../database/postgres/entities/notification.entity';
 
 @Injectable()
 export class PaymentsService {
@@ -18,6 +20,7 @@ export class PaymentsService {
     private caseRepo: Repository<Case>,
 
     private stripeService: StripeService,
+    private notificationsService: NotificationsService,
   ) {}
 
   async createPayment(caseId: string, amount: number) {
@@ -52,13 +55,18 @@ export class PaymentsService {
 
       if (payment) {
         payment.status = PaymentStatus.COMPLETED;
-
         await this.paymentRepo.save(payment);
 
         const legalCase = payment.case;
         legalCase.status = CaseStatus.CLOSED;
-
         await this.caseRepo.save(legalCase);
+        // 🔔 Notify Client
+        await this.notificationsService.create({
+          recipientId: legalCase.client.id,
+          title: 'Payment Successful',
+          message: `Your payment for case "${legalCase.title}" was successful.`,
+          type: NotificationType.PAYMENT_SUCCESS,
+        });
       }
     }
   }

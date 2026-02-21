@@ -10,6 +10,8 @@ import { Case, CaseStatus } from 'src/database/postgres/entities/case.entity';
 import { Lawyer } from 'src/database/postgres/entities/lawyer.entity';
 import { UsersService } from '../users/users.service';
 import { CreateRatingDto } from './dto/create-rating.dto';
+import { NotificationsService } from '../notifications/notifications.service';
+import { NotificationType } from '../../database/postgres/entities/notification.entity';
 
 @Injectable()
 export class RatingsService {
@@ -24,6 +26,7 @@ export class RatingsService {
     private lawyerRepo: Repository<Lawyer>,
 
     private usersService: UsersService,
+    private notificationsService: NotificationsService,
   ) {}
 
   async create(clientId: string, dto: CreateRatingDto) {
@@ -62,6 +65,13 @@ export class RatingsService {
     });
 
     await this.ratingRepo.save(rating);
+
+    await this.notificationsService.create({
+      recipientId: legalCase.lawyer.user.id,
+      title: 'New Rating Received',
+      message: `You received a new rating of ${dto.rating} stars.`,
+      type: NotificationType.RATING_RECEIVED,
+    });
 
     await this.updateLawyerStats(legalCase.lawyer.id);
 

@@ -13,6 +13,7 @@ import { RatingsModule } from './modules/ratings/ratings.module';
 import { ChatModule } from './modules/chat/chat.module';
 import { PaymentsModule } from './modules/payments/payments.module';
 import { MatchingModule } from './modules/matching/matching.module';
+import { NotificationsModule } from './modules/notifications/notifications.module';
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import { MatchingModule } from './modules/matching/matching.module';
     ChatModule,
     PaymentsModule,
     MatchingModule,
+    NotificationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

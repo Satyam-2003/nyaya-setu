@@ -6,9 +6,14 @@ import { Lawyer } from '../../database/postgres/entities/lawyer.entity';
 import { RatingsService } from './ratings.service';
 import { RatingsController } from './ratings.controller';
 import { UsersModule } from '../users/users.module';
+import { NotificationsModule } from '../notifications/notifications.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Rating, Case, Lawyer]), UsersModule],
+  imports: [
+    TypeOrmModule.forFeature([Rating, Case, Lawyer]),
+    UsersModule,
+    NotificationsModule,
+  ],
   providers: [RatingsService],
   controllers: [RatingsController],
 })
