@@ -9,6 +9,7 @@ import { ChatGateway } from './chat.gateway';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Case } from '../../database/postgres/entities/case.entity';
 import { JwtModule } from '@nestjs/jwt';
+import { NotificationsModule } from '../notifications/notifications.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { JwtModule } from '@nestjs/jwt';
       { name: ChatMessage.name, schema: ChatMessageSchema },
     ]),
     TypeOrmModule.forFeature([Case]),
+    NotificationsModule,
     JwtModule.register({}),
   ],
   providers: [ChatService, ChatGateway],

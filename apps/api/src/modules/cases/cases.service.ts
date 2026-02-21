@@ -12,6 +12,8 @@ import { CreateCaseDto } from './dto/create-case.dto';
 import { AssignLawyerDto } from './dto/assign-lawyer.dto';
 import { UpdateStatusDto } from './dto/update-status.dto';
 import { UserRole } from 'src/database/postgres/entities/user.entity';
+import { NotificationsService } from '../notifications/notifications.service';
+import { NotificationType } from '../../database/postgres/entities/notification.entity';
 
 @Injectable()
 export class CasesService {
@@ -20,6 +22,7 @@ export class CasesService {
     private caseRepository: Repository<Case>,
     private usersService: UsersService,
     private lawyersService: LawyersService,
+    private notificationsService: NotificationsService,
   ) {}
 
   // AI Classification Placeholder
@@ -60,7 +63,16 @@ export class CasesService {
     legalCase.lawyer = lawyer;
     legalCase.status = CaseStatus.ASSIGNED;
 
-    return this.caseRepository.save(legalCase);
+    await this.caseRepository.save(legalCase);
+
+    await this.notificationsService.create({
+      recipientId: lawyer.user.id,
+      title: 'New Case Assigned',
+      message: `You have been assigned to case: ${legalCase.title}`,
+      type: NotificationType.CASE_ASSIGNED,
+    });
+
+    return legalCase;
   }
 
   // update the case status

@@ -6,11 +6,13 @@ import { PaymentsService } from './payments.service';
 import { PaymentsController } from './payments.controller';
 import { StripeService } from './stripe.service';
 import { ConfigModule } from '@nestjs/config';
+import { NotificationsModule } from '../notifications/notifications.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Payment, Case]),
     ConfigModule,
+    NotificationsModule,
   ],
   providers: [PaymentsService, StripeService],
   controllers: [PaymentsController],
