@@ -20,10 +20,13 @@ export default function LoginPage() {
       });
 
       const token = res.data.access_token;
+      document.cookie = `token=${token}; path=/`
 
       const me = await api.get("/auth/me", {
         headers: { Authorization: `Bearer ${token}` },
       });
+
+      console.log("User role:", me.data.role)
 
       setAuth(me.data, token);
 
