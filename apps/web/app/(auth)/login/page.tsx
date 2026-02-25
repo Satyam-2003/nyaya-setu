@@ -14,17 +14,18 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-
+  
   const handleLogin = async () => {
     try {
       setLoading(true);
-
+      
       const res = await api.post("/auth/login", {
         email,
         password,
       });
-
+      
       const token = res.data.access_token;
+      localStorage.removeItem("token");
       document.cookie = `token=${token}; path=/`;
 
       const me = await api.get("/auth/me", {
@@ -32,6 +33,7 @@ export default function LoginPage() {
       });
 
       setAuth(me.data, token);
+      console.log(me.data.role);
 
       if (me.data.role === "client") router.push("/client");
       if (me.data.role === "lawyer") router.push("/lawyer");
