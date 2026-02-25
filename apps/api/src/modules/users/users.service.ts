@@ -17,7 +17,16 @@ export class UsersService {
   async findByEmail(email: string) {
     return this.userRepository.findOne({ where: { email } });
   }
+
   async findById(id: string) {
     return this.userRepository.findOne({ where: { id } });
+  }
+
+  async findAll(page: number, limit: number) {
+    const [data, total] = await this.userRepository.findAndCount({
+      skip: (page - 1) * limit,
+      take: limit,
+    });
+    return { data, total, page, limit };
   }
 }
