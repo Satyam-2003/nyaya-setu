@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import DashboardLayout from "../../../../components/dashboard/DashboardLayout";
 import api from "../../../../lib/axios";
+import Link from "next/link";
 
 interface CaseType {
   id: number;
@@ -103,32 +104,40 @@ export default function ClientCasesPage() {
 
           <div className="space-y-4">
             {cases.map((legalCase) => (
-              <div
+              <Link
                 key={legalCase.id}
-                className="border p-4 rounded-xl flex flex-col md:flex-row md:items-center md:justify-between gap-4"
+                href={`/client/cases/${legalCase.id}`}
+                className="block"
               >
-                <div>
-                  <h3 className="font-semibold">{legalCase.title}</h3>
-                  <p className="text-sm text-gray-600">{legalCase.category}</p>
-
-                  {legalCase.lawyer && (
-                    <p className="text-sm mt-1">
-                      Assigned Lawyer:{" "}
-                      <span className="font-medium">
-                        {legalCase.lawyer.user.name}
-                      </span>
-                    </p>
-                  )}
-                </div>
-
-                <span
-                  className={`px-3 py-1 rounded-full text-sm ${getStatusColor(
-                    legalCase.status,
-                  )}`}
+                <div
+                  key={legalCase.id}
+                  className="border p-4 rounded-xl flex flex-col md:flex-row md:items-center md:justify-between gap-4 cursor-pointer hover:bg-gray-50 transition"
                 >
-                  {legalCase.status.replace("_", " ")}
-                </span>
-              </div>
+                  <div>
+                    <h3 className="font-semibold">{legalCase.title}</h3>
+                    <p className="text-sm text-gray-600">
+                      {legalCase.category}
+                    </p>
+
+                    {legalCase.lawyer && (
+                      <p className="text-sm mt-1">
+                        Assigned Lawyer:{" "}
+                        <span className="font-medium">
+                          {legalCase.lawyer.user.name}
+                        </span>
+                      </p>
+                    )}
+                  </div>
+
+                  <span
+                    className={`px-3 py-1 rounded-full text-sm ${getStatusColor(
+                      legalCase.status,
+                    )}`}
+                  >
+                    {legalCase.status.replace("_", " ")}
+                  </span>
+                </div>
+              </Link>
             ))}
 
             {cases.length === 0 && (
