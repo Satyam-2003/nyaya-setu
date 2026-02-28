@@ -39,7 +39,7 @@ export default function ClientCasesPage() {
     setLoading(true);
 
     try {
-      await api.post("/cases", { title, description });
+      await api.post("/cases", { title, description, location });
       setTitle("");
       setDescription("");
       fetchCases();
