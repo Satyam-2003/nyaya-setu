@@ -67,62 +67,81 @@ export default function ClientCasesPage() {
 
   return (
     <DashboardLayout>
-      <div className="space-y-8">
-        <h1 className="text-2xl font-bold">My Legal Cases</h1>
+      <div className="space-y-10">
+        {/* Page Header */}
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">My Legal Cases</h1>
+            <p className="text-gray-500 text-sm mt-1">
+              Manage and track all your legal requests
+            </p>
+          </div>
+        </div>
 
         {/* Create Case Card */}
-        <div className="bg-white p-6 rounded-2xl shadow-md space-y-4">
-          <h2 className="text-lg font-semibold">Create New Case</h2>
+        <div className="bg-white border border-orange-100 rounded-3xl shadow-lg p-8 transition hover:shadow-xl">
+          <h2 className="text-xl font-semibold text-gray-900 mb-6">
+            Create New Case
+          </h2>
 
-          <input
-            className="w-full border p-3 rounded-lg"
-            placeholder="Case Title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
+          <div className="space-y-5">
+            <input
+              className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400 transition"
+              placeholder="Case Title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+            />
 
-          <textarea
-            className="w-full border p-3 rounded-lg"
-            placeholder="Describe your issue..."
-            rows={4}
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
+            <textarea
+              className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400 transition"
+              placeholder="Describe your issue..."
+              rows={4}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
 
-          <button
-            onClick={handleCreateCase}
-            disabled={loading}
-            className="bg-black text-white px-6 py-2 rounded-lg hover:bg-gray-800 transition"
-          >
-            {loading ? "Creating..." : "Create Case"}
-          </button>
+            <button
+              onClick={handleCreateCase}
+              disabled={loading}
+              className={`px-8 py-3 rounded-xl font-semibold text-white transition-all duration-200 shadow-md
+            ${
+              loading
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 active:scale-[0.97]"
+            }`}
+            >
+              {loading ? "Creating..." : "Create Case"}
+            </button>
+          </div>
         </div>
 
         {/* Case List */}
-        <div className="bg-white p-6 rounded-2xl shadow-md">
-          <h2 className="text-lg font-semibold mb-4">Your Cases</h2>
+        <div className="bg-white border border-orange-100 rounded-3xl shadow-lg p-8">
+          <h2 className="text-xl font-semibold text-gray-900 mb-6">
+            Your Cases
+          </h2>
 
-          <div className="space-y-4">
+          <div className="space-y-5">
             {cases.map((legalCase) => (
               <Link
                 key={legalCase.id}
                 href={`/client/cases/${legalCase.id}`}
-                className="block"
+                className="block group"
               >
-                <div
-                  key={legalCase.id}
-                  className="border p-4 rounded-xl flex flex-col md:flex-row md:items-center md:justify-between gap-4 cursor-pointer hover:bg-gray-50 transition"
-                >
-                  <div>
-                    <h3 className="font-semibold">{legalCase.title}</h3>
-                    <p className="text-sm text-gray-600">
+                <div className="rounded-2xl border border-gray-200 p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4 bg-[#faf9f6] hover:bg-white hover:shadow-lg transition-all duration-300">
+                  <div className="space-y-1">
+                    <h3 className="text-lg font-semibold text-gray-900 group-hover:text-orange-600 transition">
+                      {legalCase.title}
+                    </h3>
+
+                    <p className="text-sm text-gray-500">
                       {legalCase.category}
                     </p>
 
                     {legalCase.lawyer && (
-                      <p className="text-sm mt-1">
+                      <p className="text-sm mt-1 text-gray-600">
                         Assigned Lawyer:{" "}
-                        <span className="font-medium">
+                        <span className="font-medium text-gray-900">
                           {legalCase.lawyer.user.name}
                         </span>
                       </p>
@@ -130,7 +149,7 @@ export default function ClientCasesPage() {
                   </div>
 
                   <span
-                    className={`px-3 py-1 rounded-full text-sm ${getStatusColor(
+                    className={`px-4 py-1.5 rounded-full text-sm font-medium ${getStatusColor(
                       legalCase.status,
                     )}`}
                   >
@@ -141,7 +160,9 @@ export default function ClientCasesPage() {
             ))}
 
             {cases.length === 0 && (
-              <p className="text-gray-500">No cases created yet.</p>
+              <div className="text-center py-10 text-gray-400">
+                No cases created yet.
+              </div>
             )}
           </div>
         </div>

@@ -31,7 +31,7 @@ export default function CaseDetailsPage() {
 
     s.on("connect", () => {
       console.log("Socket connected");
-       s.emit("joinRoom", id);
+      s.emit("joinRoom", id);
     });
 
     s.on("newMessage", (msg: any) => {
@@ -105,14 +105,16 @@ export default function CaseDetailsPage() {
 
   return (
     <DashboardLayout>
-      <div className="space-y-8">
-        {/* Case Info */}
-        <div className="bg-white p-6 rounded-2xl shadow-md space-y-3">
-          <div className="flex justify-between items-center">
-            <h1 className="text-2xl font-bold">{caseData.title}</h1>
+      <div className="space-y-10">
+        {/* Case Info Card */}
+        <div className="bg-white border border-orange-100 rounded-3xl shadow-lg p-8 transition hover:shadow-xl">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
+            <h1 className="text-3xl font-bold text-gray-900">
+              {caseData.title}
+            </h1>
 
             <span
-              className={`px-3 py-1 rounded-full text-sm ${statusBadge(
+              className={`px-4 py-1.5 rounded-full text-sm font-medium ${statusBadge(
                 caseData.status,
               )}`}
             >
@@ -120,40 +122,58 @@ export default function CaseDetailsPage() {
             </span>
           </div>
 
-          <p className="text-gray-600">{caseData.description}</p>
+          <p className="text-gray-600 leading-relaxed">
+            {caseData.description}
+          </p>
 
-          <p className="text-sm text-gray-500">Category: {caseData.category}</p>
+          <div className="mt-4 text-sm text-gray-500">
+            Category: <span className="text-gray-700">{caseData.category}</span>
+          </div>
 
           {caseData.lawyer && (
-            <p className="text-sm">
+            <div className="mt-2 text-sm">
               Assigned Lawyer:{" "}
-              <span className="font-medium">{caseData.lawyer.user.name}</span>
-            </p>
+              <span className="font-medium text-gray-900">
+                {caseData.lawyer.user.name}
+              </span>
+            </div>
           )}
         </div>
 
         {/* Chat Section */}
-        <div className="bg-white p-6 rounded-2xl shadow-md">
-          <h2 className="text-lg font-semibold mb-4">Case Chat</h2>
+        <div className="bg-white border border-orange-100 rounded-3xl shadow-lg p-8">
+          <h2 className="text-xl font-semibold text-gray-900 mb-6">
+            Case Chat
+          </h2>
 
-          <div className="h-64 overflow-y-auto border p-4 rounded-lg space-y-2 bg-gray-50">
+          <div className="h-72 overflow-y-auto bg-[#faf9f6] rounded-2xl p-5 space-y-3 border border-gray-200">
+            {messages.length === 0 && (
+              <div className="text-center text-gray-400 text-sm">
+                No messages yet. Start the conversation.
+              </div>
+            )}
+
             {messages.map((msg, i) => (
-              <div key={i} className="bg-white p-2 rounded shadow-sm text-sm">
+              <div
+                key={i}
+                className="bg-white px-4 py-2 rounded-xl shadow-sm text-sm animate-fadeIn"
+              >
                 {msg.message}
               </div>
             ))}
           </div>
 
-          <div className="flex gap-2 mt-4">
+          <div className="flex gap-3 mt-6">
             <input
-              className="flex-1 border p-2 rounded-lg"
+              className="flex-1 px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400 transition"
               placeholder="Type message..."
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
             />
+
             <button
               onClick={handleSendMessage}
-              className="bg-black text-white px-4 rounded-lg"
+              className="px-6 py-3 rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 text-white font-semibold shadow-md hover:from-orange-600 hover:to-orange-700 active:scale-[0.97] transition-all"
             >
               Send
             </button>
@@ -162,11 +182,18 @@ export default function CaseDetailsPage() {
 
         {/* Payment Section */}
         {caseData.status === "assigned" && (
-          <div className="bg-white p-6 rounded-2xl shadow-md">
-            <h2 className="text-lg font-semibold mb-3">Complete Payment</h2>
+          <div className="bg-white border border-orange-100 rounded-3xl shadow-lg p-8 transition hover:shadow-xl">
+            <h2 className="text-xl font-semibold text-gray-900 mb-4">
+              Complete Payment
+            </h2>
+
+            <p className="text-gray-600 mb-6">
+              Secure your legal assistance by completing the payment.
+            </p>
+
             <button
               onClick={handlePayment}
-              className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700"
+              className="px-8 py-3 rounded-xl bg-gradient-to-r from-green-500 to-green-600 text-white font-semibold shadow-md hover:from-green-600 hover:to-green-700 active:scale-[0.97] transition-all"
             >
               Pay ₹1000
             </button>
@@ -175,15 +202,17 @@ export default function CaseDetailsPage() {
 
         {/* Rating Section */}
         {caseData.status === "closed" && (
-          <div className="bg-white p-6 rounded-2xl shadow-md space-y-4">
-            <h2 className="text-lg font-semibold">Rate Your Lawyer</h2>
+          <div className="bg-white border border-orange-100 rounded-3xl shadow-lg p-8 space-y-6 transition hover:shadow-xl">
+            <h2 className="text-xl font-semibold text-gray-900">
+              Rate Your Lawyer
+            </h2>
 
             <div className="flex gap-2">
               {[1, 2, 3, 4, 5].map((star) => (
                 <button
                   key={star}
                   onClick={() => setRating(star)}
-                  className={`text-2xl ${
+                  className={`text-3xl transition-transform duration-200 hover:scale-110 ${
                     star <= rating ? "text-yellow-500" : "text-gray-300"
                   }`}
                 >
@@ -193,7 +222,7 @@ export default function CaseDetailsPage() {
             </div>
 
             <textarea
-              className="w-full border p-3 rounded-lg"
+              className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400 transition"
               placeholder="Write review..."
               value={review}
               onChange={(e) => setReview(e.target.value)}
@@ -201,7 +230,7 @@ export default function CaseDetailsPage() {
 
             <button
               onClick={handleRating}
-              className="bg-black text-white px-6 py-2 rounded-lg"
+              className="px-8 py-3 rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 text-white font-semibold shadow-md hover:from-orange-600 hover:to-orange-700 active:scale-[0.97] transition-all"
             >
               Submit Rating
             </button>
