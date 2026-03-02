@@ -69,12 +69,32 @@ export default function ClientCasesPage() {
     <DashboardLayout>
       <div className="space-y-10">
         {/* Page Header */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900">My Legal Cases</h1>
-            <p className="text-gray-500 text-sm mt-1">
-              Manage and track all your legal requests
-            </p>
+        <div className="mb-10">
+          <div
+            className="relative overflow-hidden rounded-3xl 
+                  bg-gradient-to-r from-orange-50 via-[#fefaf4] to-orange-100 
+                  px-6 py-8 md:px-10 md:py-12 
+                  shadow-sm border border-orange-100"
+          >
+            {/* Subtle decorative glow */}
+            <div
+              className="absolute -top-12 -right-12 w-40 h-40 
+                    bg-orange-200/40 rounded-full blur-3xl"
+            ></div>
+
+            <div className="relative z-10 max-w-2xl">
+              <h1
+                className="text-2xl sm:text-3xl md:text-4xl 
+                     font-bold text-gray-800 leading-tight"
+              >
+                My Legal Cases
+              </h1>
+
+              <p className="mt-3 text-sm sm:text-base text-gray-600 leading-relaxed">
+                Manage and track all your legal requests with clarity and
+                confidence.
+              </p>
+            </div>
           </div>
         </div>
 
