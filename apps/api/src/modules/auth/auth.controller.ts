@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, UseGuards } from '@nestjs/common';
+import { Controller, Post, Body, Get, UseGuards, Patch, Req } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { UserRole } from 'src/database/postgres/entities/user.entity';
 import { GetUser } from 'src/common/decorators/get-user.decorator';
@@ -33,6 +33,19 @@ export class AuthController {
     return this.authService.login(body.email, body.password);
   }
 
+  @Patch('update-profile')
+  @UseGuards(JwtAuthGuard)
+  async updateProfile(
+    @Req() req,
+    @Body() body: { name?: string },
+  ) {
+    return this.authService.updateProfile(
+      req.user.id,
+      body,
+    );
+  }
+
+
   @UseGuards(JwtAuthGuard)
   @Get('me')
   getProfile(@GetUser() user: any) {
@@ -45,4 +58,6 @@ export class AuthController {
   adminRoute() {
     return { message: 'Welcome Admin 👑' };
   }
+
+  
 }

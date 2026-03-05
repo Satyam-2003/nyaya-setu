@@ -15,7 +15,13 @@ interface UserProfile {
 }
 
 export default function ClientProfilePage() {
-  const [user, setUser] = useState<UserProfile | null>(null);
+  const [user, setUser] = useState<UserProfile>({
+    id: "",
+    name: "",
+    email: "",
+    role: "",
+    createdAt: "",
+  });
   const [casesCount, setCasesCount] = useState(0);
   const [activeCases, setActiveCases] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -48,10 +54,8 @@ export default function ClientProfilePage() {
     if (!user) return;
 
     try {
-      const updatedData = await api.patch(`/users/${user.id}`, {
+      const updatedData = await api.patch(`/auth/update-profile`, {
         name: user.name,
-        phone: user.phone,
-        location: user.location,
       });
       setUser(updatedData.data);
 
@@ -94,7 +98,7 @@ export default function ClientProfilePage() {
               <div>
                 <label className="text-sm text-gray-500">Full Name</label>
                 <input
-                  value={user.name}
+                  value={user.name || ""}
                   onChange={(e) => setUser({ ...user, name: e.target.value })}
                   className="mt-1 w-full border border-orange-200 rounded-xl p-3 focus:ring-2 focus:ring-orange-400 outline-none"
                 />
@@ -106,29 +110,6 @@ export default function ClientProfilePage() {
                   value={user.email}
                   disabled
                   className="mt-1 w-full bg-gray-100 rounded-xl p-3 text-gray-500"
-                />
-              </div>
-
-              <div>
-                <label className="text-sm text-gray-500">Phone</label>
-                <input
-                  value={user.phone || ""}
-                  onChange={(e) => setUser({ ...user, phone: e.target.value })}
-                  className="mt-1 w-full border border-orange-200 rounded-xl p-3 focus:ring-2 focus:ring-orange-400 outline-none"
-                />
-              </div>
-
-              <div>
-                <label className="text-sm text-gray-500">Location</label>
-                <input
-                  value={user.location || ""}
-                  onChange={(e) =>
-                    setUser({
-                      ...user,
-                      location: e.target.value,
-                    })
-                  }
-                  className="mt-1 w-full border border-orange-200 rounded-xl p-3 focus:ring-2 focus:ring-orange-400 outline-none"
                 />
               </div>
             </div>

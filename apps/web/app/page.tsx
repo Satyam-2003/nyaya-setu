@@ -29,7 +29,7 @@ export default function HomePage() {
             height={42}
           />
           <span className="text-xl font-semibold tracking-wide">
-            NyayaSetu
+            Nyaya-Setu
           </span>
         </div>
 

@@ -48,4 +48,18 @@ export class AuthService {
       access_token: this.jwtService.sign(payload),
     };
   }
+
+  async updateProfile(userId: string, body: any) {
+    const user = await this.usersService.findById(userId);
+
+    if (!user) throw new UnauthorizedException('User not found');
+
+    if (body.name) {
+      user.name = body.name;
+    }
+    await this.usersService.update(userId, user);
+    return {
+      message: 'Profile update successfully',
+    };
+  }
 }

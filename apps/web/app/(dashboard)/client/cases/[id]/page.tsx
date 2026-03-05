@@ -16,6 +16,7 @@ export default function CaseDetailsPage() {
   const [rating, setRating] = useState(0);
   const [review, setReview] = useState("");
   const [socket, setSocket] = useState<any>(null);
+  const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
     if (id) {
@@ -81,13 +82,31 @@ export default function CaseDetailsPage() {
   };
 
   const handleRating = async () => {
-    await api.post("/ratings", {
-      caseId: id,
-      rating,
-      review,
-    });
+    if (rating === 0) {
+      alert("Please select a rating before submitting");
+      return;
+    }
 
-    alert("Rating submitted!");
+    try {
+      await api.post("/ratings", {
+        caseId: id,
+        rating,
+        review,
+      });
+      alert("Rating submitted!");
+      setSubmitted(true);
+    } catch (error) {
+      console.log("Error submitting rating:", error);
+      alert("Failed to submit rating. Please try again.");
+    }
+  };
+
+  const handleStartClicked = (value: number) => {
+    if (rating === value) {
+      setRating(0);
+    } else {
+      setRating(value);
+    }
   };
 
   const statusBadge = (status: string) => {
@@ -101,7 +120,14 @@ export default function CaseDetailsPage() {
     return colors[status] || "bg-gray-100";
   };
 
-  if (!caseData) return <div>Loading...</div>;
+  if (!caseData)
+    return (
+      <DashboardLayout>
+        <div className="flex justify-center items-center h-64">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+        </div>
+      </DashboardLayout>
+    );
 
   return (
     <DashboardLayout>
@@ -211,7 +237,7 @@ export default function CaseDetailsPage() {
               {[1, 2, 3, 4, 5].map((star) => (
                 <button
                   key={star}
-                  onClick={() => setRating(star)}
+                  onClick={() => handleStartClicked(star)}
                   className={`text-3xl transition-transform duration-200 hover:scale-110 ${
                     star <= rating ? "text-yellow-500" : "text-gray-300"
                   }`}
@@ -230,6 +256,7 @@ export default function CaseDetailsPage() {
 
             <button
               onClick={handleRating}
+              disabled={!rating}
               className="px-8 py-3 rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 text-white font-semibold shadow-md hover:from-orange-600 hover:to-orange-700 active:scale-[0.97] transition-all"
             >
               Submit Rating
