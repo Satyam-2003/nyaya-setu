@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import DashboardLayout from "../../../components/dashboard/DashboardLayout";
 import api from "../../../lib/axios";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 interface CaseType {
   id: string;
@@ -21,6 +22,7 @@ export default function ClientDashboard() {
   const [cases, setCases] = useState<CaseType[]>([]);
   const [notifications, setNotifications] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
     fetchDashboardData();
@@ -79,7 +81,7 @@ export default function ClientDashboard() {
 
             {/* Buttons Section */}
             <div className="flex flex-col sm:flex-row gap-4 w-full lg:w-auto">
-              <button className="w-full sm:w-auto bg-orange-500 text-white px-6 py-3 rounded-xl shadow-md hover:bg-orange-600 transition font-medium">
+              <button onClick={() => router.push("/client/cases")} className="w-full sm:w-auto bg-orange-500 text-white px-6 py-3 rounded-xl shadow-md hover:bg-orange-600 transition font-medium">
                 + Create New Case
               </button>
             </div>

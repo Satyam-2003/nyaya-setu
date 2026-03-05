@@ -15,7 +15,7 @@ export class MatchingController {
   constructor(private matchingService: MatchingService) {}
 
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('admin')
+  @Roles('admin', 'client')
   @Post()
   matchCase(@Body() dto: MatchCaseDto) {
     return this.matchingService.matchCase(

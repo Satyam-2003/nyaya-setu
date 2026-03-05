@@ -29,7 +29,7 @@ export class CasesController {
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('admin')
+  @Roles('admin','client')
   @Patch(':id/assign')
   assign(@Param('id') id: string, @Body() dto: AssignLawyerDto) {
     return this.casesService.assign(id, dto);

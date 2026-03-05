@@ -23,6 +23,8 @@ export default function ClientCasesPage() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [loading, setLoading] = useState(false);
+  const [suggestedLawyers, setSuggestedLawyers] = useState<any[]>([]);
+  const [currentCaseId, setCurrentCaseId] = useState<number | null>(null);
 
   const fetchCases = async () => {
     const res = await api.get("/cases?page=1&limit=20");
@@ -35,19 +37,42 @@ export default function ClientCasesPage() {
 
   const handleCreateCase = async () => {
     if (!title || !description) return;
-
     setLoading(true);
 
     try {
-      await api.post("/cases", { title, description, location });
+      const res = await api.post("/cases", { title, description });
+      const createdCase = res.data;
+      setCurrentCaseId(createdCase.id);
+      alert("Case created successfully");
+
+      //fetch suggested lawyers
+      const matchRes = await api.post("/matching", {
+        caseId: createdCase.id,
+      });
+      setSuggestedLawyers(matchRes.data);
       setTitle("");
       setDescription("");
       fetchCases();
     } catch (err) {
       alert("Error creating case");
     }
-
     setLoading(false);
+  };
+
+  const handleAssignLawyer = async (lawyerId: number) => {
+    if (!currentCaseId) return;
+
+    try {
+      await api.patch(`/cases/${currentCaseId}/assign`, {
+        lawyerId,
+      });
+      alert("Lawyer assigned successfully");
+      setSuggestedLawyers([]);
+      setCurrentCaseId(null);
+      fetchCases();
+    } catch (error) {
+      alert("Error assigning lawyer");
+    }
   };
 
   const getStatusColor = (status: string) => {
@@ -134,6 +159,37 @@ export default function ClientCasesPage() {
             </button>
           </div>
         </div>
+
+        {suggestedLawyers.length > 0 && (
+          <div className="bg-white border border-orange-100 rounded-3xl shadow-lg p-8">
+            <h2 className="text-xl font-semibold text-gray-900 mb-6">
+              Suggested Lawyers
+            </h2>
+
+            <div className="space-y-4">
+              {suggestedLawyers.map((item: any) => (
+                <div
+                  key={item.lawyer.id}
+                  className="flex justify-between items-center p-5 border rounded-xl"
+                >
+                  <div>
+                    <p className="font-semibold">{item.lawyer.user.name}</p>
+                    <p className="text-sm text-gray-500">
+                      Specialization: {item.lawyer.specialization}
+                    </p>
+                  </div>
+
+                  <button
+                    onClick={() => handleAssignLawyer(item.lawyer.id)}
+                    className="px-6 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600"
+                  >
+                    Select Lawyer
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Case List */}
         <div className="bg-white border border-orange-100 rounded-3xl shadow-lg p-8">

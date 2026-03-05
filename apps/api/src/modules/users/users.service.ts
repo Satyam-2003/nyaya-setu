@@ -14,6 +14,11 @@ export class UsersService {
     return this.userRepository.save(userData);
   }
 
+  async update(id: string, userData: Partial<User>) {
+    await this.userRepository.update(id, userData);
+    return this.findById(id);
+  }
+
   async findByEmail(email: string) {
     return this.userRepository.findOne({ where: { email } });
   }

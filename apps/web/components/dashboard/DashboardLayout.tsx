@@ -66,7 +66,7 @@ export default function DashboardLayout({
           {/* Brand Text */}
           <div className="flex flex-col leading-tight">
             <span className="text-xl font-bold tracking-tight text-gray-900">
-              Nyaya Setu
+              Nyaya-Setu
             </span>
           </div>
         </div>
