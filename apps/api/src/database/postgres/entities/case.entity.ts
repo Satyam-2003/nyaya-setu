@@ -41,7 +41,7 @@ export class Case {
 
   @ManyToOne(() => Lawyer, { nullable: true, eager: true })
   lawyer!: Lawyer;
-
+  
   @CreateDateColumn()
   createdAt!: Date;
 }
