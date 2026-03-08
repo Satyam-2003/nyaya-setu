@@ -45,6 +45,7 @@ export class PaymentsService {
 
     return { checkoutUrl: session.url };
   }
+
   async handleWebhook(event: any) {
     if (event.type === 'checkout.session.completed') {
       const session = event.data.object;
@@ -69,5 +70,33 @@ export class PaymentsService {
         });
       }
     }
+  }
+
+  async findAll(userId: string, page = 1, limit = 20) {
+
+    const skip = (page - 1) * limit;
+
+    const [payments, total] = await this.paymentRepo.findAndCount({
+      where: {
+        case: {
+          lawyer: {
+            id: userId,
+          },
+        },
+      },
+      relations: ['case', 'case.lawyer', 'case.client'],
+      skip,
+      take: limit,
+      order: {
+        createdAt: 'DESC',
+      },
+    });
+
+    return {
+      data: payments,
+      total,
+      page,
+      limit,
+    };
   }
 }

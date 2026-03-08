@@ -31,6 +31,7 @@ export default function DashboardLayout({
   if (user?.role === "lawyer") {
     navItems = [
       { name: "Dashboard", href: "/lawyer" },
+      { name: "Earnings", href: "/lawyer/earnings" },
       { name: "Assigned Cases", href: "/lawyer/cases" },
       { name: "Profile", href: "/lawyer/profile" },
     ];
